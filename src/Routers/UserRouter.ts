@@ -4,7 +4,6 @@ import User from "../Models/User"
 import IUserRepository from "../Repositories/IUserRepository"
 import Token from "../Auth/Token";
 import UserRepository from "../Repositories/UserRepository";
-import MockUserRepo from "../Repositories/MockUserRepo";
 
 let userRouter: Router = Router();
 let userRepository: IUserRepository = new UserRepository();
