@@ -29,7 +29,7 @@ export default class Database {
     public static async update(query: any, newValues: any, collection: string): Promise<boolean> {
         let operation = this.database
         .collection(collection)
-        .updateOne(query, newValues)
+        .updateOne(query, {$set: newValues})
         return (await operation).modifiedCount == 1;
     }
 
