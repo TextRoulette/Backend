@@ -19,6 +19,11 @@ export default class UserRepository implements IUserRepository {
         return users[0];
     }
 
+    public async addUser(token: Token, user: User): Promise<boolean> {
+        user.id = token.sub;
+        return await Database.create(user, "users");
+    }
+
     public async setChatId(token: Token, uuid: string): Promise<boolean> {
         return await Database.update({
             "id": token.sub
