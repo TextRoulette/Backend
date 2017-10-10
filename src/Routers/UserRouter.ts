@@ -18,7 +18,7 @@ userRouter.get("/", async (req, res) => {
         res.send(user);
     } catch (e) {
         let err = e as Error;
-        if (err.message = "Not Found") {
+        if (err.message == "Not Found") {
             res.statusCode = 404;
         } else {
             res.statusCode = 401;
