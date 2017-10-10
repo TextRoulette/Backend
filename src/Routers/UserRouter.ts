@@ -16,13 +16,28 @@ userRouter.get("/", async (req, res) => {
         delete user.id; //Frontend must not care
         res.statusCode = 200;
         res.send(user);
-    } catch (error) {
-        let err = error as Error;
+    } catch (e) {
+        let err = e as Error;
         if (err.message = "Not Found") {
             res.statusCode = 404;
         } else {
             res.statusCode = 401;
         }
+        res.end(err.message);
+    }
+});
+
+userRouter.post("/", async (req, res) => {
+    let accessToken: string = req.header("Authentication") as string;
+    try {
+        let token: Token  = await Authority.authorize(accessToken);
+        let user: User = req.body;
+        userRepository.addUser(token, user);
+        res.statusCode = 201;
+        res.end();
+    } catch (e) {
+        let err = e as Error;
+        res.statusCode = 401;
         res.end(err.message);
     }
 });
