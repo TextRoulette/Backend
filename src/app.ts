@@ -17,6 +17,12 @@ router.get("/", (req, res) => {
     res.sendFile("index.html", directory);
 });
 
+app.use((req, res, next) => { // Handle CORS
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.use(Parser.json());
 app.use("/", router);
 app.use("/user", userRouter);
