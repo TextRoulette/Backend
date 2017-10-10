@@ -10,7 +10,6 @@ export default class Database {
         if (Database.database == null || Database.database == undefined) {
             try {
                 Database.database = await Mongo.connect(Database.uri);
-                console.log("connected");
             } catch (e) {
                 console.log(e);
             }
