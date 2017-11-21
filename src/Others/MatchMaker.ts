@@ -17,7 +17,7 @@ export default class MatchMaker {
         this.frequency = frequency;
     }
 
-    public requestUuid: (token: Token) => Promise<string> = async(token) => {
+    public requestUuid: (token: string) => Promise<string> = async(token) => {
         let deferred = new DeferredPromise<any>(token);
         this.queue.enqueue(deferred);
         if (this.cycle == null) {
