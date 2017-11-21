@@ -19,7 +19,7 @@ router.get("/", (req, res) => {
 
 app.options("/", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "*");
+    res.header("Access-Control-Allow-Headers", "Authentication");
     res.statusCode = 204;
     res.end();
 });
