@@ -18,7 +18,7 @@ async function setupChatroom(uuid: string): Promise<void> {
         socket.removeAllListeners(); // Prevents duplicates
         socket.on("msg", (msg: string) => {
             console.log(msg);
-            namespace.emit("msg", msg);
+            socket.broadcast.emit("msg", msg);
         });
     });
 }
