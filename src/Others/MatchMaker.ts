@@ -17,8 +17,8 @@ export default class MatchMaker {
         this.frequency = frequency;
     }
 
-    public requestUuid: () => Promise<string> = async() => {
-        let deferred = new DeferredPromise<string>();
+    public requestUuid: (token: Token) => Promise<string> = async(token) => {
+        let deferred = new DeferredPromise<string>(token.sub);
         this.queue.enqueue(deferred);
         if (this.cycle == null) {
             this.cycle = setInterval(this.matchCycle, this.frequency); //Enable spinlock
@@ -35,11 +35,19 @@ export default class MatchMaker {
             this.cycleCounter = 0;
         }
         if (this.queue.size() > 1) {
-            let first: DeferredPromise<string> = this.queue.dequeue();
-            let second: DeferredPromise<string> = this.queue.dequeue();
+            let first: DeferredPromise<any> = this.queue.dequeue();
+            let second: DeferredPromise<any> = this.queue.dequeue();
             let uuid: string = UUID.v4();
-            first.resolve(uuid);
-            second.resolve(uuid);
+            let firstUserPayload = {
+                uuid: uuid,
+                token: second.savedData
+            };
+            let secondUserPayload = {
+                uuid: uuid,
+                token: first.savedData
+            }
+            first.resolve(firstUserPayload);
+            second.resolve(secondUserPayload);
             this.cycleCounter = 0;
             if (this.queue.size() == 0) {
                 clearInterval(this.cycle as NodeJS.Timer)
@@ -56,12 +64,18 @@ class DeferredPromise<T> {
     private prom: Promise<T>
     private res: (value?: T) => void;
     private rej: (reason?: any) => void;
+    private data: any;
 
-    public constructor() {
+    public constructor(data: any) {
         this.prom = new Promise<T>((res, rej) => {
             this.res = res;
             this.rej = rej;
         });
+        this.data = data;
+    }
+
+    public get savedData(): any {
+        return this.data;
     }
 
     public get promise(): Promise<T> {

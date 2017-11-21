@@ -27,11 +27,13 @@ chatRouter.get("/", async (req, res) => {
     let accessToken: string = req.header("Authentication") as string;
     try {
         let token: Token = await Authority.authorize(accessToken);
-        let uuid: string = await matchmaker.requestUuid();
+        let data: any = await matchmaker.requestUuid(token);
+        let uuid: string = data.uuid;
+        let otherPersonToken: string = data.token;
         setupChatroom(uuid);
         userRepository.setChatId(token, uuid);
         res.statusCode = 200;
-        let json = {"uuid": uuid}
+        let json = data;
         res.end(JSON.stringify(json));
     } catch (e) {
         let error = e as Error;
