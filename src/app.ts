@@ -18,13 +18,16 @@ router.get("/", (req, res) => {
 });
 
 app.options("/", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "*");
     res.statusCode = 204;
     res.end();
 });
 
 app.use((req, res, next) => { // Handle CORS
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "*");
+    res.header("Access-Control-Allow-Methods", "GET POST PUT DELETE PATCH OPTIONS");
     next();
 });
 
