@@ -2,6 +2,7 @@ import IUserRepository from "./IUserRepository";
 import Token from "../Auth/Token";
 import User from "../Models/User";
 import Database from "./Database";
+import { setTimeout } from "timers";
 
 export default class UserRepository implements IUserRepository {
 
@@ -27,9 +28,19 @@ export default class UserRepository implements IUserRepository {
     public async updateKarma(token: Token, karma: number): Promise<void> {
         let user = await this.getUser(token);
         user.karma += karma;
+        if (user.karma < 0) {
+            user.marked = true;
+        }
         Database.update({
             "id": token.sub
         }, user, "users");
+        setTimeout(() => {
+            user.karma = 0;
+            user.marked = false;
+            Database.update({
+                "id": token.sub
+            }, user, "users");
+        }, 300000);
     }
 
     public async setChatId(token: Token, uuid: string): Promise<boolean> {

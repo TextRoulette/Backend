@@ -3,6 +3,7 @@ export default interface User {
     username: string, 
     karma: number,
     languages: string[],
+    marked: boolean,
     gender?: string,
     age?: number,
     chatId?: string
