@@ -18,7 +18,7 @@ export default class MatchMaker {
     }
 
     public requestUuid: (token: Token) => Promise<string> = async(token) => {
-        let deferred = new DeferredPromise<string>(token.sub);
+        let deferred = new DeferredPromise<any>(token);
         this.queue.enqueue(deferred);
         if (this.cycle == null) {
             this.cycle = setInterval(this.matchCycle, this.frequency); //Enable spinlock
