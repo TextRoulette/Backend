@@ -32,8 +32,25 @@ userRouter.post("/", async (req, res) => {
     try {
         let token: Token  = await Authority.authorize(accessToken);
         let user: User = req.body;
+        user.karma = 0;
         userRepository.addUser(token, user);
         res.statusCode = 201;
+        res.end();
+    } catch (e) {
+        let err = e as Error;
+        res.statusCode = 401;
+        res.end(err.message);
+    }
+});
+
+userRouter.put("/", async (req, res) =>{ 
+    let accessToken: string = req.header("Authentication") as string;
+    try {
+        let token: Token = await Authority.authorize(accessToken);
+        let change: any = req.body;
+        let karma: number = parseInt(change.karma);
+        userRepository.updateKarma(token, karma);
+        res.statusCode = 204;
         res.end();
     } catch (e) {
         let err = e as Error;

@@ -24,6 +24,14 @@ export default class UserRepository implements IUserRepository {
         return await Database.create(user, "users");
     }
 
+    public async updateKarma(token: Token, karma: number): Promise<void> {
+        let user = await this.getUser(token);
+        user.karma += karma;
+        Database.update({
+            "id": token.sub
+        }, user, "users");
+    }
+
     public async setChatId(token: Token, uuid: string): Promise<boolean> {
         return await Database.update({
             "id": token.sub
