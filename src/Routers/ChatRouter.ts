@@ -7,7 +7,7 @@ import UserRepository from "../Repositories/UserRepository";
 import io from "./SocketRouter"
 
 let chatRouter: Router = Router();
-let matchmaker = new MatchMaker(5, 250);
+let matchmaker = new MatchMaker(30, 250);
 
 let userRepository: IUserRepository = new UserRepository();
 
